@@ -1,0 +1,107 @@
+Firewall Setup and Testing Report
+
+Objective:
+
+To configure, test, and verify firewall rules on Windows (Windows Defender Firewall) and Linux (UFW - Uncomplicated Firewall) to allow or block traffic.
+
+🔹 Windows Firewall Configuration (PowerShell & Netsh)
+
+1. Check Existing Firewall Rules
+
+To list firewall rules related to Telnet, run:
+
+``` Get-NetFirewallRule | Where-Object { $_.DisplayName -like "*Telnet*" } ```
+
+2. Block Telnet (Port 23) - PowerShell
+
+Run in PowerShell (Administrator Mode):
+
+```New-NetFirewallRule -DisplayName "Block Telnet" -Direction Inbound -Action Block -Protocol TCP -LocalPort 23 ````
+
+(If this command fails, ensure PowerShell is run as Administrator.)
+
+3. Alternative Firewall Block (Using Netsh in CMD)
+
+If the PowerShell command doesn’t work, use the Netsh method:
+
+```netsh advfirewall firewall add rule name="Block Telnet" dir=in action=block protocol=TCP localport=23``` 
+
+4. Block Outbound Telnet Traffic
+
+To block outgoing Telnet connections, run:
+
+```netsh advfirewall firewall add rule name="Block Telnet" dir=out action=block protocol=TCP remoteport=23 ```
+
+5. Verify Firewall Rules
+Run:
+
+```netsh advfirewall firewall show rule name="Block Telnet"``` 
+
+(Ensure the rule appears with correct settings.)
+
+6. Test if Telnet is Blocked
+
+Try to connect using:
+
+```telnet telehack.com 23``` 
+
+•	If the firewall is correctly configured, the connection should fail.
+
+7. Remove Firewall Rule (If Needed)
+
+To delete the Telnet block rule:
+
+```netsh advfirewall firewall delete rule name="Block Telnet" ``` 
+
+🔹 Linux Firewall Configuration (UFW - Uncomplicated Firewall)
+
+1. Install UFW (If Not Installed)
+Run:
+
+```sudo apt update && sudo apt install ufw -y ```
+
+2. Check Current UFW Status
+
+Run:
+```sudo ufw status``` 
+
+•	If UFW is inactive, enable it:
+
+```sudo ufw enable ```
+
+3. Block Telnet (Port 23)
+Run:
+
+```sudo ufw deny 23/tcp ```
+
+(This prevents Telnet connections on Linux.)
+
+4. Allow Telnet (If Needed)
+To permit Telnet connections, use:
+
+```sudo ufw allow 23/tcp ```
+
+5. Verify UFW Firewall Rules
+Run:
+
+```sudo ufw status numbered``` 
+
+(This displays all active firewall rules.)
+
+6. Delete Firewall Rule (If Needed)
+
+Find the rule number using:
+
+```sudo ufw status numbered ```
+
+Then remove it using:
+
+```sudo ufw delete [rule_number] ```
+
+7. Test if Telnet is Blocked
+
+Try:
+
+```telnet telehack.com 23``` 
+
+•	If correctly configured, Telnet should fail to connect.
