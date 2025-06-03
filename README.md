@@ -1,4 +1,4 @@
-# Task4 : # Firewall Setup & Testing Guide (Windows)
+# Firewall Setup & Testing Guide (Windows)
 
 ## 📌 Overview
 This guide provides step-by-step instructions for setting up, testing, and verifying firewall rules on **Windows Defender Firewall** to allow or block network traffic.
